@@ -1,0 +1,58 @@
+# Avipro Travels - Git Ignore File
+
+# Sensitive files
+config/database.php
+ADMIN_CREDENTIALS.txt
+*.log
+
+# Uploaded files (keep directory structure)
+uploads/packages/*
+uploads/banners/*
+!uploads/packages/.htaccess
+!uploads/banners/.htaccess
+!uploads/.htaccess
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+/tmp/
+/temp/
+
+# PHP
+vendor/
+composer.lock
+.env
+
+# Logs
+*.log
+logs/
+
+# Cache
+cache/
+*.cache
+
+# Node modules (if any)
+node_modules/
+package-lock.json
+
+# Backup files
+*.bak
+*.backup
+*~
+
