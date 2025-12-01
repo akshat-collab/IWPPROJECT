@@ -65,11 +65,11 @@ closeDBConnection($conn);
     
     <section class="packages-section">
         <div class="container">
-            <!-- Search and Filter -->
+            <!-- Search and Filter - Dynamic -->
             <div class="search-filter-bar">
-                <form method="GET" class="search-form">
-                    <input type="text" name="search" placeholder="Search packages..." value="<?php echo htmlspecialchars($search); ?>" class="search-input">
-                    <select name="destination" class="filter-select">
+                <form id="search-form" class="search-form" onsubmit="return false;">
+                    <input type="text" id="package-search" name="search" placeholder="🔍 Search packages..." value="<?php echo htmlspecialchars($search); ?>" class="search-input">
+                    <select id="destination-filter" name="destination" class="filter-select">
                         <option value="">All Destinations</option>
                         <?php foreach ($destinations as $dest): ?>
                             <option value="<?php echo htmlspecialchars($dest['destination']); ?>" <?php echo $destination == $dest['destination'] ? 'selected' : ''; ?>>
@@ -77,58 +77,65 @@ closeDBConnection($conn);
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                    <?php if (!empty($search) || !empty($destination)): ?>
-                        <a href="packages.php" class="btn btn-secondary">Clear</a>
-                    <?php endif; ?>
+                    <button type="button" onclick="clearFilters()" class="btn btn-secondary">Clear</button>
                 </form>
+                <div id="results-count" class="results-count" style="margin-top: 15px; text-align: center; color: var(--text-light); font-weight: 500;">
+                    <?php echo count($packages); ?> package<?php echo count($packages) !== 1 ? 's' : ''; ?> found
+                </div>
             </div>
             
-            <?php if (empty($packages)): ?>
-                <div class="no-results">
-                    <p>No packages found matching your criteria.</p>
-                    <a href="packages.php" class="btn btn-primary">View All Packages</a>
-                </div>
-            <?php else: ?>
-                <div class="packages-grid">
-                    <?php foreach ($packages as $package): ?>
-                        <div class="package-card">
-                            <?php if ($package['image']): ?>
-                                <div class="package-image">
-                                    <img src="<?php echo BASE_URL . htmlspecialchars($package['image']); ?>" alt="<?php echo htmlspecialchars($package['title']); ?>">
-                                    <?php if ($package['discount_price']): ?>
-                                        <span class="discount-badge">Save <?php echo round((($package['price'] - $package['discount_price']) / $package['price']) * 100); ?>%</span>
-                                    <?php endif; ?>
-                                </div>
-                            <?php endif; ?>
-                            <div class="package-content">
-                                <h3><?php echo htmlspecialchars($package['title']); ?></h3>
-                                <p class="package-destination">📍 <?php echo htmlspecialchars($package['destination']); ?></p>
-                                <p class="package-duration">⏱️ <?php echo htmlspecialchars($package['duration']); ?></p>
-                                <div class="package-price">
-                                    <?php if ($package['discount_price']): ?>
-                                        <span class="old-price"><?php echo formatCurrency($package['price']); ?></span>
-                                        <span class="current-price"><?php echo formatCurrency($package['discount_price']); ?></span>
-                                    <?php else: ?>
-                                        <span class="current-price"><?php echo formatCurrency($package['price']); ?></span>
-                                    <?php endif; ?>
-                                </div>
-                                <p class="package-description"><?php echo htmlspecialchars(substr($package['description'], 0, 150)) . '...'; ?></p>
-                                <div class="package-actions">
-                                    <a href="package-details.php?id=<?php echo $package['id']; ?>" class="btn btn-primary">View Details</a>
-                                    <a href="booking.php?package=<?php echo $package['id']; ?>" class="btn btn-secondary">Book Now</a>
-                                </div>
+            <!-- Packages Grid - Dynamic Loading -->
+            <div id="packages-grid" class="packages-grid">
+                <?php foreach ($packages as $package): ?>
+                    <div class="package-card">
+                        <?php if ($package['image']): ?>
+                            <div class="package-image">
+                                <img src="<?php echo BASE_URL . htmlspecialchars($package['image']); ?>" alt="<?php echo htmlspecialchars($package['title']); ?>" loading="lazy">
+                                <?php if ($package['discount_price']): ?>
+                                    <span class="discount-badge">Save <?php echo round((($package['price'] - $package['discount_price']) / $package['price']) * 100); ?>%</span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                        <div class="package-content">
+                            <h3><?php echo htmlspecialchars($package['title']); ?></h3>
+                            <p class="package-destination">📍 <?php echo htmlspecialchars($package['destination']); ?></p>
+                            <p class="package-duration">⏱️ <?php echo htmlspecialchars($package['duration']); ?></p>
+                            <div class="package-price">
+                                <?php if ($package['discount_price']): ?>
+                                    <span class="old-price"><?php echo formatCurrency($package['price']); ?></span>
+                                    <span class="current-price"><?php echo formatCurrency($package['discount_price']); ?></span>
+                                <?php else: ?>
+                                    <span class="current-price"><?php echo formatCurrency($package['price']); ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <p class="package-description"><?php echo htmlspecialchars(substr($package['description'], 0, 150)) . '...'; ?></p>
+                            <div class="package-actions">
+                                <a href="package-details.php?id=<?php echo $package['id']; ?>" class="btn btn-primary">View Details</a>
+                                <a href="booking.php?package=<?php echo $package['id']; ?>" class="btn btn-secondary">Book Now</a>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
     </section>
     
     <?php include 'includes/footer.php'; ?>
     
+    <script>
+        const BASE_URL = '<?php echo BASE_URL; ?>';
+    </script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/dynamic.js"></script>
+    <script>
+        function clearFilters() {
+            document.getElementById('package-search').value = '';
+            document.getElementById('destination-filter').value = '';
+            if (window.dynamicPackages) {
+                window.dynamicPackages.searchPackages('');
+            }
+        }
+    </script>
 </body>
 </html>
 

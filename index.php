@@ -132,7 +132,11 @@ closeDBConnection($conn);
     
     <?php include 'includes/footer.php'; ?>
     
+    <script>
+        const BASE_URL = '<?php echo BASE_URL; ?>';
+    </script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/dynamic.js"></script>
 </body>
 </html>
 

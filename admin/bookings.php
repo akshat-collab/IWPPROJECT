@@ -33,7 +33,7 @@ closeDBConnection($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookings & Enquiries - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/admin.css">
 </head>
 <body>
     <?php include 'includes/header.php'; ?>
@@ -116,7 +116,7 @@ closeDBConnection($conn);
         </div>
     </div>
     
-    <script src="../assets/js/admin.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/admin.js"></script>
     <script>
         function viewBooking(booking) {
             document.getElementById('bookingDetails').innerHTML = `

@@ -22,7 +22,7 @@ closeDBConnection($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/admin.css">
 </head>
 <body>
     <?php include 'includes/header.php'; ?>
@@ -36,22 +36,22 @@ closeDBConnection($conn);
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total Packages</h3>
-                    <p class="stat-number"><?php echo $total_packages; ?></p>
+                    <p class="stat-number" id="total-packages"><?php echo $total_packages; ?></p>
                 </div>
                 
                 <div class="stat-card">
                     <h3>Active Packages</h3>
-                    <p class="stat-number"><?php echo $active_packages; ?></p>
+                    <p class="stat-number" id="active-packages"><?php echo $active_packages; ?></p>
                 </div>
                 
                 <div class="stat-card">
                     <h3>Total Bookings</h3>
-                    <p class="stat-number"><?php echo $total_bookings; ?></p>
+                    <p class="stat-number" id="total-bookings"><?php echo $total_bookings; ?></p>
                 </div>
                 
                 <div class="stat-card">
                     <h3>Pending Bookings</h3>
-                    <p class="stat-number"><?php echo $pending_bookings; ?></p>
+                    <p class="stat-number" id="pending-bookings"><?php echo $pending_bookings; ?></p>
                 </div>
             </div>
             
@@ -93,7 +93,8 @@ closeDBConnection($conn);
         </main>
     </div>
     
-    <script src="../assets/js/admin.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/admin.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/dynamic.js"></script>
 </body>
 </html>
 
